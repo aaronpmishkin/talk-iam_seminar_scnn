@@ -501,7 +501,7 @@
 	\]
 
 	\pause
-	\red{What does it mean? Is it a neural network still?}
+	\red{What does it mean? Is it still a neural network?}
 \end{frame}
 
 
@@ -569,7 +569,7 @@
 	But \( f \) is invariant to such re-parameterizations!
 	\pause
 	\begin{align*}
-		\half & \norm{\sum_{j=1}^p \phi_{g_j}(X, w^*_{j})\alpha_j^* - y}_2^2 + \frac{\lambda}{2} \sum_{j=1}^p \norm{w^*_{j}}_2^2 + |\alpha_j^*|^2    \\
+		\implies \half & \norm{\sum_{j=1}^p \phi_{g_j}(X, w^*_{j})\alpha_j^* - y}_2^2 + \frac{\lambda}{2} \sum_{j=1}^p \norm{w^*_{j}}_2^2 + |\alpha_j^*|^2    \\
 		      & \quad \quad \geq \half \norm{\sum_{j=1}^p \phi_{g_j}(X, w'_{j})\alpha'_j - y}_2^2 + \lambda \sum_{j=1}^p \norm{w'_{j}}_2 |\alpha'_j| \\
 	\end{align*}
 \end{frame}
@@ -664,7 +664,7 @@
 	\begin{itemize}
 		\item This is a polyhedral cone which we rewrite as
 		      \[
-			      \calK_j = \bigcap_{i=1}^n \cbr{w : [S_j]_{ii} \cdot \abr{x, w} \geq 0},
+			      \calK_j = \bigcap_{i=1}^n \cbr{w : [S_j]_{ii} \cdot \abr{x_i, w} \geq 0},
 		      \]
 		      where \( S_j = (2D_j - I) \).
 	\end{itemize}
@@ -687,7 +687,7 @@
 
 \begin{frame}{Cone Decompositions: Not All Cones are Equal}
 
-	\textbf{Alternative Program}: show we don't need ``singular'' cones \( \calK_j \),
+	\textbf{Alternative Idea}: show we don't need ``singular'' cones \( \calK_j \),
 	\[
 		\calK_j - \calK_j \subsetneq \R^d.
 	\]

@@ -103,49 +103,31 @@
 \end{frame}
 \setbeamercolor{background canvas}{bg=white}
 
-\begin{frame}{Context: Ten Years Since AlexNet}
+\begin{frame}{Context: Ten Years since AlexNet}
 
 	{
 		\large \textbf{10 Years Ago}: AlexNet won ILSVRC 2012 and started the modern ``deep learning'' movement in ML.
 	}
+
 	\pause
+	\vspace{1ex}
 
-	\vspace{1em}
-
-	\horizontalrule
-
-	\vspace{1em}
-
-	AlexNet improved over the next best model by \( \approx 10\% \) (top-5).
-
-	\vspace{1em}
-
-	\textbf{Key Techniques}:
 	\begin{itemize}
-		\item ``a large, deep \green{convolutional} neural network''.
-		\item ``a very efficient \green{GPU} implementation of convolutional nets''.
-		\item ``'\green{dropout}', a recently-developed regularization method that proved to be very effective.''
+		\large
+		\item AlexNet won with \( \red{84.69}\% \) top-five accuracy \citep{krizhevsky2012alexnet}.
 	\end{itemize}
 
-	\source{https://image-net.org/challenges/LSVRC/2012/results.html\#abstract}
-\end{frame}
-
-\begin{frame}{Context: ImageNet Today}
-
-	\begin{center}
-		\large AlexNet won with \( \red{84.69}\% \) top-five accuracy \citep{krizhevsky2012alexnet}.
-	\end{center}
-
 	\pause
 	\horizontalrule
 
-	\begin{center}
-		\large Today, models get \( \green{99.02}\% \) top-5 accuracy \citep{yuan2021florence}!
+	\begin{itemize}
+		\large
+		\item Today, models get \( \green{99.02}\% \) top-5 accuracy \citep{yuan2021florence}!
+		      \vspace{1ex}
 
-		\vspace{3em}
-
-		(Using all sorts of tricks like pre-training, transformers, etc.)
-	\end{center}
+		      \pause
+		\item (Using all sorts of tricks like pre-training, transformers, etc.)
+	\end{itemize}
 \end{frame}
 
 
@@ -249,26 +231,11 @@
 
 \begin{frame}{Context: Better Methods}
 	\begin{center}
-		{ \Large
+		{ \huge
 			We need better methods!
 		}
 
 	\end{center}
-	\vspace{1em}
-	\pause
-
-	\begin{itemize}
-		\item \textbf{Stable} --- No mysterious failure modes.\pause
-
-		      \vspace{0.5em}
-		\item \textbf{Tuning-Free} --- No grid-search.\pause
-
-		      \vspace{0.5em}
-		\item \textbf{Robust} --- Work on a variety of problems.\pause
-
-		      \vspace{0.5em}
-		\item \textbf{Fast} --- better than \( O(1/\sqrt{T}) \).
-	\end{itemize}
 \end{frame}
 
 
@@ -308,7 +275,7 @@
 
 	{\large \textcolor{Red}{Non-Convex Problem}}
 	\[
-		\min_{W_1, w_2} \underbrace{\norm{\sum_{j=1}^m (X W_{1j})_+ w_{wj} - y}_2^2}_{\text{Squared Error}}
+		\min_{W_1, w_2} \underbrace{\half \norm{\sum_{j=1}^m (X W_{1j})_+ w_{wj} - y}_2^2}_{\text{Squared Error}}
 		+ \underbrace{\lambda \sum_{j=1}^m \norm{W_{1j}}_2^2 + |w_{2j}|^2}_{\text{Weight Decay}},
 	\]
 	where \( \rbr{x}_+ = \max\cbr{x, 0} \) is the ReLU activation.
@@ -323,7 +290,7 @@
 
 \begin{frame}{Aside: ReLU Activation Patterns}
 
-	Each ReLU neuron $W_{1j}$ is active on a half-space.
+	Each ReLU neuron is active on a half-space:
 
 	\pause
 	\begin{figure}[]
@@ -331,16 +298,26 @@
 		\input{assets/activation_pattern_1}
 	\end{figure}
 
+	\pause
+	\begin{itemize}
+		\item \textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
+	\end{itemize}
+
 \end{frame}
 
 \begin{frame}{Aside: ReLU Activation Patterns}
 
-	Each ReLU neuron $W_{1j}$ is active on a half-space.
+	Each ReLU neuron is active on a half-space:
 
 	\begin{figure}[]
 		\centering
 		\input{assets/activation_pattern_2}
 	\end{figure}
+
+
+	\begin{itemize}
+		\item \textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
+	\end{itemize}
 
 \end{frame}
 
@@ -595,13 +572,13 @@
 		\large
 		\textbf{Approach}:
 		\begin{enumerate}
+            \large
 			\item \pause
 			      Characterize \green{convex reformulations} via model problem;
+			      \vspace{1ex}
 			\item \pause
 			      Extend results to \red{non-convex} training problem
 			      using solution mapping;
-			\item \pause
-			      Use insights for \green{better algorithms}.
 		\end{enumerate}
 	}
 
@@ -612,14 +589,14 @@
 		\item Let \( Z \in \R^{n \times d} \) be a data matrix and \( y \) associated targets.
 		      \pause
 		\item Let \( \calB = \cbr{b_1, \ldots, b_p} \) partition the
-		      features space.
+		      feature set.
 		      \pause
 	\end{itemize}
 
 	\vspace{2ex}
 
 	C-ReLU and C-GReLU are \green{constrained group lasso} problems:
-
+	\vspace{-1ex}
 	\begin{equation*}
 		\textbf{CGL}: \min_{w}
 		\cbr{ \half \norm{Z w - y}_2^2
@@ -671,54 +648,56 @@
 	\textbf{Suppose}: \( \nabla L(W_1, w_2) = 0 \). Then \( \ldots \)?
 	\pause \red{critical point}.
 
-	\vspace{1ex}
-	\begin{itemize}
-		\item Could be a local min, local max, saddle point, etc.
-	\end{itemize}
-
-
 	\pause
 	\horizontalrule
 
 	\textbf{CGL}: \green{KKT conditions} are necessary and sufficient for optimality:\pause
 
-	\begin{align*}
-		\ri                                   & \geq 0,                            \tag{dual feasible}         \\
-		\Ki^\top \wi                          & \leq 0                             \tag{primal feasible}       \\
-		\Xbi^\top (Z w - y) + \Ki \ri + s_\bi & = 0                                \tag{stationary Lagrangian} \\
-		[\ri]_j \cdot [\Ki]_j^\top \wi        & = 0 \quad \forall \, j \in [a_\bi], \tag{CS}
-	\end{align*}
-	where \( s_\bi \in \partial \lambda \norm{\wi}_2 \).
-
-\end{frame}
-
-\begin{frame}{CGL: Towards Characterizing the Optimal Set}
-
-	\textbf{Facts}: let \( (w, \rho) \) be primal dual optimal. \pause
+	\vspace{1ex}
 	\begin{itemize}
-		\item Model fit \( \hat y = Z w \) is \blue{constant} over optimal set \( \solfn(\lambda) \). \pause
-		\item Implies correlation \( \Xbi^\top (y - Z w) \) is \blue{constant} over \( \solfn(\lambda) \). \pause
-		\item We may assume \( \rho \) is \blue{unique} (e.g. min-norm dual solution).
-	\end{itemize}
-
-	\pause
-	\horizontalrule
-
-	\textbf{Non-zero Blocks}:
-	\begin{itemize}
-		\item Suppose \( \wi \neq 0 \).
+		\item Primal-dual feasibility, complementary slackness \ldots
 		      \pause
-		\item Then \( s_\bi = \lambda \wi / \norm{\wi}_2 \).
-		      \pause
-		\item Rearranging stationarity implies \( \exists \alpha_\bi > 0 \):
+		      \vspace{1ex}
+		\item Stationary Lagrangian:
 		      \[
-			      \wi = \blue{\alpha_\bi} \underbrace{\sbr{\Xbi^\top (y - Z w) - \Ki \ri}}_{\vi}.
+			      \underbrace{\Xbi^\top (Z w - y) + \Ki \ri}_{\vi} \in \partial \lambda \norm{\wi}_2.
 		      \]
 		      \pause
-		\item Every solution is non-negative scalings of these \( \vi \) vectors.
+		      \begin{itemize}
+			      \normalsize
+			      \item It turns out each \( \vi \) is \textbf{unique}!
+		      \end{itemize}
 	\end{itemize}
 
 \end{frame}
+
+%\begin{frame}{CGL: Towards Characterizing the Optimal Set}
+
+%    \textbf{Facts}: let \( (w, \rho) \) be primal dual optimal. \pause
+%    \begin{itemize}
+%        \item Model fit \( \hat y = Z w \) is \blue{constant} over optimal set \( \solfn(\lambda) \). \pause
+%        \item Implies correlation \( \Xbi^\top (y - Z w) \) is \blue{constant} over \( \solfn(\lambda) \). \pause
+%        \item We may assume \( \rho \) is \blue{unique} (e.g. min-norm dual solution).
+%    \end{itemize}
+
+%    \pause
+%    \horizontalrule
+
+%    \textbf{Non-zero Blocks}:
+%    \begin{itemize}
+%        \item Suppose \( \wi \neq 0 \).
+%              \pause
+%        \item Then \( s_\bi = \lambda \wi / \norm{\wi}_2 \).
+%              \pause
+%        \item Rearranging stationarity implies \( \exists \alpha_\bi > 0 \):
+%              \[
+%                  \wi = \blue{\alpha_\bi} \underbrace{\sbr{\Xbi^\top (y - Z w) - \Ki \ri}}_{\vi}.
+%              \]
+%              \pause
+%        \item Every solution is non-negative scalings of these \( \vi \) vectors.
+%    \end{itemize}
+
+%\end{frame}
 
 \begin{frame}{CGL: the Optimal Set}
 
@@ -811,31 +790,29 @@
 \begin{frame}{CGL: Implications}
 	\begin{center}
 		\Large
-		What can we do with this theory?
+		\red{What can we do with this theory?}
 	\end{center}
 
 	\pause
 	\horizontalrule
 
-	{\large Both \textbf{analysis} and \textbf{algorithms}!}
+	\begin{center}
+		\Large Both \green{analysis} and \green{algorithms}!
+	\end{center}
+
 	\pause
 	\begin{itemize}
-		\item We give sufficient conditions for permutation-\green{unique} solutions,
-		      solution \green{continuity}, differential \green{stability}, and more.
+		\large
+		\item Conditions for \textbf{uniqueness},
+		      \textbf{continuity}, \textbf{stability}, and more!
 
 		      \pause
 		      \vspace{1ex}
-		\item A convex program for the \green{min \( \ell_2 \)-norm} convex reformulation.
-		      \begin{itemize}
-			      \item Minimizes \( \norm{W_{1i}}_2^4 + \norm{w_{2i}}_2^4 \) in non-convex space.
-		      \end{itemize}
-
+		\item Simple algorithms for \textbf{min-norm} solutions!
 		      \pause
 		      \vspace{1ex}
-		\item An iterative procedure for \green{optimal neuron pruning}.
-		      \begin{itemize}
-			      \item Computes smallest neural network with optimal objective.
-		      \end{itemize}
+
+		\item \textbf{Optimal} (i.e. objective-preserving) neuron pruning.
 	\end{itemize}
 
 \end{frame}
@@ -932,7 +909,9 @@
 	\vspace{1em}
 
 	\pause
-	Unfortunately, there is no extension to full-rank \( X \).
+	\begin{itemize}
+		\item Unfortunately, there is \red{no extension} to full-rank \( X \).
+	\end{itemize}
 
 \end{frame}
 

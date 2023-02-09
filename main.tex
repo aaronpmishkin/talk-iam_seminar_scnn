@@ -671,6 +671,12 @@
 	\textbf{Suppose}: \( \nabla L(W_1, w_2) = 0 \). Then \( \ldots \)?
 	\pause \red{critical point}.
 
+	\vspace{1ex}
+	\begin{itemize}
+		\item Could be a local min, local max, saddle point, etc.
+	\end{itemize}
+
+
 	\pause
 	\horizontalrule
 
@@ -690,20 +696,27 @@
 
 	\textbf{Facts}: let \( (w, \rho) \) be primal dual optimal. \pause
 	\begin{itemize}
-		\item Model fit \( \hat y = Z w \) is constant over optimal set. \pause
-		\item Implies correlation \( \ci = \Xbi^\top (y - Z w) \) is constant. \pause
-		\item Can always assume \( \rho \) is unique (e.g. min-norm dual solution).
+		\item Model fit \( \hat y = Z w \) is \blue{constant} over optimal set \( \solfn(\lambda) \). \pause
+		\item Implies correlation \( \Xbi^\top (y - Z w) \) is \blue{constant} over \( \solfn(\lambda) \). \pause
+		\item We may assume \( \rho \) is \blue{unique} (e.g. min-norm dual solution).
 	\end{itemize}
 
 	\pause
 	\horizontalrule
 
-	\textbf{Non-zero Blocks}: \( \wi \neq 0 \implies s_\bi = \lambda \wi / \norm{\wi}_2 \).
-	We find that
-	\[
-		\wi = \blue{\alpha_\bi} \underbrace{\sbr{\Xbi^\top (y - Z w) - \Ki \ri}}_{\text{Unique}},
-	\]
-	for \( \blue{\alpha_\bi} \geq 0 \)
+	\textbf{Non-zero Blocks}:
+	\begin{itemize}
+		\item Suppose \( \wi \neq 0 \).
+		      \pause
+		\item Then \( s_\bi = \lambda \wi / \norm{\wi}_2 \).
+		      \pause
+		\item Rearranging stationarity implies \( \exists \alpha_\bi > 0 \):
+		      \[
+			      \wi = \blue{\alpha_\bi} \underbrace{\sbr{\Xbi^\top (y - Z w) - \Ki \ri}}_{\vi}.
+		      \]
+		      \pause
+		\item Every solution is non-negative scalings of these \( \vi \) vectors.
+	\end{itemize}
 
 \end{frame}
 
@@ -733,9 +746,16 @@
 		\end{equation*}
 
 	\end{proposition}
+
+	\pause
+	\begin{itemize}
+		\item We can make \( S_\lambda \) explicit at the cost of
+		      \red{additional linear constraints}.
+	\end{itemize}
+
 \end{frame}
 
-\begin{frame}{Non-Convex Optimal Set}
+\begin{frame}{CGL: Mapping back to Non-Convex Networks}
 
 	Remember how to convert between solutions:
 	\begin{equation*}\label{eq:convex-to-relu}
@@ -754,7 +774,7 @@
 		Suppose \( m \geq m^* \).
 		Then the optimal set for the ReLU problem is
 		\vspace{-1ex}
-		\begin{equation}\label{eq:relu-sol-fn}
+		\begin{equation*}\label{eq:relu-sol-fn}
 			\begin{aligned}
 				\hspace{-0.5em} \calO_\lambda  = \,
 				\big\{
@@ -768,8 +788,55 @@
 				W_{1i} = 0, \, w_{2i} = 0
 				\big\}.
 			\end{aligned}
-		\end{equation}
+		\end{equation*}
 	\end{corollary}
+
+\end{frame}
+
+\begin{frame}{CGL: Appearance of Solution Sets}
+	\begin{figure}[]
+		\centering
+		\includegraphics[width=0.96\textwidth]{assets/solution_sets_vis_270.png}
+	\end{figure}
+
+	\begin{itemize}
+		\item Non-convex parameterization maps polytope into curved
+		      manifold.
+	\end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}{CGL: Implications}
+	\begin{center}
+		\Large
+		What can we do with this theory?
+	\end{center}
+
+	\pause
+	\horizontalrule
+
+	{\large Both \textbf{analysis} and \textbf{algorithms}!}
+	\pause
+	\begin{itemize}
+		\item We give sufficient conditions for permutation-\green{unique} solutions,
+		      solution \green{continuity}, differential \green{stability}, and more.
+
+		      \pause
+		      \vspace{1ex}
+		\item A convex program for the \green{min \( \ell_2 \)-norm} convex reformulation.
+		      \begin{itemize}
+			      \item Minimizes \( \norm{W_{1i}}_2^4 + \norm{w_{2i}}_2^4 \) in non-convex space.
+		      \end{itemize}
+
+		      \pause
+		      \vspace{1ex}
+		\item An iterative procedure for \green{optimal neuron pruning}.
+		      \begin{itemize}
+			      \item Computes smallest neural network with optimal objective.
+		      \end{itemize}
+	\end{itemize}
 
 \end{frame}
 
@@ -777,10 +844,21 @@
 \setbeamercolor{background canvas}{bg=LightCyan}
 \begin{frame}{}
 	\begin{center}
-		\huge III. Cone Decompositions
+		\huge IV. Cone Decompositions
 	\end{center}
 \end{frame}
 \setbeamercolor{background canvas}{bg=white}
+
+\begin{frame}{Cone Decompositions: Big Picture}
+	\begin{center}
+		\Large Are these models really different?
+	\end{center}
+
+	\begin{figure}[]
+		\centering
+		\input{assets/relations_complete}
+	\end{figure}
+\end{frame}
 
 \begin{frame}{Cone Decompositions: Gated ReLU Networks }
 
@@ -1006,7 +1084,7 @@
 
 \begin{frame}{}
 	\begin{center}
-		\huge V. Algorithms
+		\huge V. Training Algorithms
 	\end{center}
 \end{frame}
 \setbeamercolor{background canvas}{bg=white}
@@ -1105,11 +1183,12 @@
 	\pause
 	{ \large
 		\begin{itemize}
-			\item We develop new convex reformulations of two-layer neural networks
-			      with \textbf{gated ReLU} activations.\pause
+			\item We leverage convex reformulations to \textbf{analyze} the set
+			      of optimal ReLU networks.
+			      \pause
 			      \vspace{0.5em}
 
-			\item We  approximate the ReLU training problem by \textbf{unconstrained}
+			\item We approximate the ReLU training problem by \textbf{unconstrained}
 			      convex optimization of a Gated ReLU network.\pause
 			      \vspace{0.5em}
 

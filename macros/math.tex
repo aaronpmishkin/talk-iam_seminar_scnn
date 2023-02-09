@@ -127,7 +127,7 @@
 \newcommand{\argdot}{{\,\vcenter{\hbox{\tiny$\bullet$}}\,}} %generic argument dot
 
 % absolute value
-\newcommand{\abs}[1]{\left\vert #1\right\vert} 
+\newcommand{\abs}[1]{\left\vert #1\right\vert}
 
 \newcommand{\seq}[1]{\rbr{#1}}
 
@@ -237,3 +237,71 @@
 \newcommand{\addnumber}{\addtocounter{equation}{1}\tag{\theequation}}
 
 %%%%%%%%%
+
+%% Group Lasso %%
+\newcommand{\bi}{{b_i}}
+\newcommand{\wi}{w_\bi}
+\newcommand{\vi}{v_\bi}
+\newcommand{\ci}{c_\bi}
+\newcommand{\zi}{z_\bi}
+\newcommand{\Xbi}{X_\bi}
+\newcommand{\act}{{\calA_{\lambda}}}
+\newcommand{\inact}{{\calI_{\lambda}}}
+\newcommand{\tran}{{\calT_{\lambda}}}
+\newcommand{\equi}{{\calE_{\lambda}}}
+
+\newcommand{\acts}{{\calA_{\lambda}^{*}}}
+\newcommand{\trans}{{\calT_{\lambda}^{*}}}
+
+\newcommand{\wa}{w_\act}
+\newcommand{\was}{w_\acts}
+\newcommand{\we}{w_\equi}
+\newcommand{\va}{v_\act}
+\newcommand{\vas}{v_\acts}
+\newcommand{\ca}{c_\act}
+\newcommand{\cas}{c_\acts}
+\newcommand{\ve}{v_\equi}
+\newcommand{\ce}{c_\equi}
+\newcommand{\Xa}{X_\act}
+\newcommand{\Xas}{X_\acts}
+\newcommand{\Xe}{X_\equi}
+
+\newcommand{\wmin}{w^*}
+\newcommand{\solfn}{\calW^*}
+
+\newcommand{\Null}{\text{Null}}
+\newcommand{\Row}{\text{Row}}
+\newcommand{\Span}{\text{Span}}
+\newcommand{\Range}{\text{Range}}
+
+\newcommand{\Di}{\calD_{\bi}}
+\newcommand{\Si}{\calN_{\bi}}
+\newcommand{\Dis}{\Di^{*}}
+\newcommand{\Sis}{\Ni^{*}}
+\newcommand{\Ds}{\calD^{*}_\lambda}
+\newcommand{\Ss}{\calN^{*}_\lambda}
+
+\newcommand{\Ki}{K_{\bi}}
+\newcommand{\Kid}{K_{\Di}}
+\newcommand{\Kids}{K_{\Di^*}}
+\newcommand{\Kd}{K_{\calD}}
+\newcommand{\Kda}{K_{\calD \cap \act}}
+\newcommand{\Kdas}{K_{\Gs}}
+\newcommand{\Ka}{K_\act}
+
+\newcommand{\Gs}{\calG^{*}_{\lambda}}
+
+% dual parameters
+\newcommand{\ri}{\rho_{\bi}}
+\newcommand{\ract}{\rho_{\act}}
+\newcommand{\racts}{\rho_{\acts}}
+\newcommand{\rid}{\rho_{\Di}}
+\newcommand{\rd}{\rho_{\calD}}
+\newcommand{\rda}{\rho_{\calD \cap \act}}
+\newcommand{\rdas}{\rho_{\Gs}}
+\newcommand{\ra}{\rho_{\act}}
+\newcommand{\rmin}{\rho^*}
+
+\newcommand{\vmin}{v^*}
+\newcommand{\diag}{\text{diag}}
+\newcommand{\nnz}{\text{nnz}}

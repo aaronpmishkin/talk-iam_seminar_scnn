@@ -7,6 +7,7 @@
 \usepackage{xcolor}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{centernot}
 
 \input{macros/math}
 \input{macros/plots}
@@ -30,12 +31,12 @@
 
 \addbibresource[]{refs.bib}
 
-\title{Fast Convex Optimization for Two-Layer ReLU Networks:}
-\subtitle{Equivalent Model Classes and Cone Decompositions}
+\title{Two-Layer ReLU Networks:}
+\subtitle{New Insights from Convex Reformulations}
 \author{Aaron Mishkin \and Arda Sahiner \and Mert Pilanci}
 %\institute{Stanford University}
 \collaborators{
-	\includegraphics[width=0.2\linewidth]{assets/aaron.png}
+	\includegraphics[width=0.2\linewidth]{assets/rainy.jpg}
 	\includegraphics[width=0.2\linewidth]{assets/arda.jpg}
 	\includegraphics[width=0.2\linewidth]{assets/mert.jpg}
 }
@@ -68,7 +69,7 @@
 \begin{frame}{Overview}
 
 	{
-		\large \red{Problem}: Training neural networks is slow and sensitive.
+		\large \red{Problem}: Non-convex neural networks are hard to analyze.
 	}
 
 	\pause
@@ -77,18 +78,18 @@
 	\vspace{0.5em}
 
 	{
-		\large \green{Our Contribution}: use convex reformulations for training.
+		\large \green{Our Contribution}: study neural networks through convex reformulations.
 	}
 
 	\pause
 	\vspace{0.5em}
 
 	\begin{enumerate}
-		\item \textbf{Equivalent Model Classes}: new convex reformulations of neural networks.\pause
+		\item \textbf{Critical Points}: characterize all stationary/optimal points of the non-convex training objective.\pause
 
-		\item \textbf{Cone Decompositions}: new connections between our convex training programs.\pause
+		\item \textbf{Cone Decompositions}: develop new connections between convex training programs.\pause
 
-		\item \textbf{Algorithms}: robust, tuning-free, and fast algorithms leveraging these connections.
+		\item \textbf{Algorithms}: leverage our theory for robust, tuning-free, and fast algorithms.
 	\end{enumerate}
 
 \end{frame}
@@ -121,9 +122,9 @@
 
 	\textbf{Key Techniques}:
 	\begin{itemize}
-		\item ``a large, deep convolutional neural network''.
-		\item ``a very efficient GPU implementation of convolutional nets''.
-		\item ``'dropout', a recently-developed regularization method that proved to be very effective.''
+		\item ``a large, deep \green{convolutional} neural network''.
+		\item ``a very efficient \green{GPU} implementation of convolutional nets''.
+		\item ``'\green{dropout}', a recently-developed regularization method that proved to be very effective.''
 	\end{itemize}
 
 	\source{https://image-net.org/challenges/LSVRC/2012/results.html\#abstract}
@@ -132,40 +133,20 @@
 \begin{frame}{Context: ImageNet Today}
 
 	\begin{center}
-		\large AlexNet won with \( 84.69\% \) top-five accuracy \citep{krizhevsky2012alexnet}.
+		\large AlexNet won with \( \red{84.69}\% \) top-five accuracy \citep{krizhevsky2012alexnet}.
 	\end{center}
 
 	\pause
 	\horizontalrule
 
 	\begin{center}
-		\large Today, models get \( 99.02\% \) top-5 accuracy \citep{yuan2021florence}!
+		\large Today, models get \( \green{99.02}\% \) top-5 accuracy \citep{yuan2021florence}!
 
 		\vspace{3em}
 
 		(Using all sorts of tricks like pre-training, transformers, etc.)
 	\end{center}
 \end{frame}
-
-
-%\begin{frame}{Context: Slides from the Winners}
-%    \begin{figure}[]
-%        \centering
-%        \includegraphics[width=0.9\textwidth]{assets/imagenet_2010_training_algos_grayed.png}
-%    \end{figure}
-
-%    \source{https://www.image-net.org/static\_files/files/ILSVRC2010\_NEC-UIUC.pdf}
-%\end{frame}
-
-
-%\begin{frame}{Context: Slides from the Winners --- Revealed!}
-%    \begin{figure}[]
-%        \centering
-%        \includegraphics[width=0.9\textwidth]{assets/imagenet_2010_training_algos.png}
-%    \end{figure}
-
-%    \source{https://www.image-net.org/static\_files/files/ILSVRC2010\_NEC-UIUC.pdf}
-%\end{frame}
 
 
 \begin{frame}{Context: DALL$\cdot$E 2}
@@ -209,37 +190,45 @@
 
 \end{frame}
 
-\begin{frame}{Context: Challenges Optimizing Neural Networks}
+\begin{frame}{Context: Challenges from Non-Convexity}
 	\begin{center}
 		\Large
-		Optimizing neural networks with SGD is \textcolor{red}{hard}!
+		Non-convexity makes analysis and training \red{hard}.
 	\end{center}
 
+	\pause
 	\begin{itemize}
+		\item \textbf{Stationarity}: Stationarity \( \centernot \implies \) optimality.
+		      Few/no certificates.
+
+		      \pause
+		\item \textbf{Model Churn}: different local minima,
+		      different performance \citep{henderson2018deep}.
+
+		      \pause
 		\item \textbf{Tuning}: step-size, momentum, batch-size, etc.
-
-		\item \textbf{Model Churn}: new seed, different
-		      performance \citep{henderson2018deep}.
-
-		\item \textbf{Certificates}: few/no guarantees.
 	\end{itemize}
 
 	\pause
 	\horizontalrule
 
+	\vspace{-2ex}
+
 	\begin{center}
 		\Large
-		But these issues don't exist for convex models!
+		But these issues don't exist for \green{convex} models!
 	\end{center}
 
+	\pause
 	\begin{itemize}
-		\item \textbf{Tuning}: line-search, full-batch methods, acceleration, etc.
+		\item \textbf{Certificates}: stationary points are global minima.
 
+		      \pause
 		\item \textbf{Model Churn}: strict/strong convexity gives uniqueness.
 
-		\item \textbf{Certificates}: stationary points are global minima.
+		      \pause
+		\item \textbf{Tuning}: line-search, full-batch methods, acceleration, etc.
 	\end{itemize}
-
 
 \end{frame}
 
@@ -296,7 +285,7 @@
 
 	{ \large
 		\textbf{Basic Idea}: We start with a \red{non-convex} optimization problem and derive
-		an equivalent \green{convex} optimization problem.
+		an equivalent \green{convex} program.
 	}
 
 	\pause
@@ -310,7 +299,6 @@
 		\item We can map a solution \( u^* \) for one problem into a solution
 		      \( v^* \) for the other.
 		      \vspace{0.5em}
-		\item Call this our \emph{solution mapping}.
 	\end{itemize}
 
 \end{frame}
@@ -320,8 +308,8 @@
 
 	{\large \textcolor{Red}{Non-Convex Problem}}
 	\[
-		\min_{w, \alpha} \underbrace{\norm{\sum_{j=1}^m (X w_j)_+ \alpha_j - y}_2^2}_{\text{Squared Error}}
-		+ \underbrace{\lambda \sum_{j=1}^m \norm{w_j}_2^2 + |\alpha_j|^2}_{\text{Weight Decay}},
+		\min_{W_1, w_2} \underbrace{\norm{\sum_{j=1}^m (X W_{1j})_+ w_{wj} - y}_2^2}_{\text{Squared Error}}
+		+ \underbrace{\lambda \sum_{j=1}^m \norm{W_{1j}}_2^2 + |w_{2j}|^2}_{\text{Weight Decay}},
 	\]
 	where \( \rbr{x}_+ = \max\cbr{x, 0} \) is the ReLU activation.
 	\pause
@@ -332,6 +320,31 @@
 	\end{figure}
 
 \end{frame}
+
+\begin{frame}{Aside: ReLU Activation Patterns}
+
+	Each ReLU neuron $W_{1j}$ is active on a half-space.
+
+	\pause
+	\begin{figure}[]
+		\centering
+		\input{assets/activation_pattern_1}
+	\end{figure}
+
+\end{frame}
+
+\begin{frame}{Aside: ReLU Activation Patterns}
+
+	Each ReLU neuron $W_{1j}$ is active on a half-space.
+
+	\begin{figure}[]
+		\centering
+		\input{assets/activation_pattern_2}
+	\end{figure}
+
+\end{frame}
+
+
 \begin{frame}{Convex Reformulations: Convex Problem}
 
 	{\large \textcolor{ForestGreen}{Convex Reformulation}} \citep{pilanci2020convex}
@@ -430,6 +443,94 @@
 	\end{itemize}
 \end{frame}
 
+\begin{frame}{Convex Reformulations: Solution Mapping}
+
+	Given \( \rbr{v^*, w^*} \), an optimal non-convex ReLU network is
+
+	\begin{equation*}\label{eq:convex-to-relu}
+		\textbf{C to NC:} \quad
+		\begin{aligned}
+			W_{1i} & = v_i^*/ \sqrt{\norm{v_i^*}}, \quad w_{2i} = \sqrt{\norm{v_i^*}}
+			\\
+			W_{1j} & = w_i^*/ \sqrt{\norm{w_i^*}}, \quad w_{2j} = -\sqrt{\norm{w_i^*}}.
+		\end{aligned}
+	\end{equation*}
+
+	\pause
+	\begin{itemize}
+		\item Optimal solution \green{balances} weight between layers.
+	\end{itemize}
+
+
+	\pause
+	\horizontalrule
+
+	Given \( (W_{1i}^*, w_{2i}^*) \), the optimal convex ReLU model is
+	\begin{equation*}
+		\textbf{NC to C:} \quad
+		\begin{aligned}
+			v_i & = W_{1i}^* \abs{w_{2i}^*} & \mbox{if \( w_{2i}^* \geq 0 \)} \\
+			w_i & = W_{1i}^* \abs{w_{2i}^*} & \mbox{otherwise.}
+		\end{aligned}
+	\end{equation*}
+
+	\pause
+	\begin{itemize}
+		\item Optimal solution \green{combines} weights from both layers.
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Convex Reformulations: Gated ReLU Networks}
+	What can we do with the convex ReLU problem?
+
+	\[
+		\begin{aligned}
+			\textbf{C-ReLU}: \min_{u} & \norm{\sum_{j=1}^p D_j X (v_j - w_j) - y}_2^2 +
+			\lambda \sum_{j=1}^p \norm{v_j}_2 + \norm{w_j}_2                            \\
+			                          & \hspace{0.2em} \red{\text{s.t. }
+				v_j, w_j \in \calK_j := \cbr{w : (2D_j - I) X w \geq 0},}
+		\end{aligned}
+	\]
+
+	\pause
+	\horizontalrule
+
+	\textbf{Relaxation}: drop the cone constraints and simplify to obtain,
+	\[
+		\begin{aligned}
+			\textbf{C-GReLU}: \min_{u} & \norm{\sum_{j=1}^p D_j X u_j - y}_2^2 +
+			\lambda \sum_{j=1}^p \norm{u_j}_2                                    \\
+		\end{aligned}
+	\]
+
+	\pause
+	\red{What does it mean? Is it still a neural network?}
+\end{frame}
+
+
+\begin{frame}{Convex Reformulations: Gated ReLU Networks}
+
+	\begin{beamercolorbox}[wd=\textwidth,sep=1em]{result}
+		\textbf{Theorem 2.2} (informal): C-GReLU is equivalent to solving
+		\[
+			\min_{W_1, w_2} \half \norm{\sum_{j=1}^p \phi_{g_j}(X, W_{1j})w_{2j} - y}_2^2 + \frac{\lambda}{2} \sum_{j=1}^p \norm{W_{1j}}_2^2 + |w_{2j}|^2,
+		\]
+		with the ``Gated ReLU'' \citep{fiat2019decoupling} activation function
+		\[ \phi_{g}(X, u) = \text{diag}(\mathbbm{1}(Xg \geq 0)) X u, \]
+		and gate vectors \( g_j \) such that
+		\[
+			D_j = \text{diag}[\mathbbm{1}(X g_j \geq 0)].
+		\]
+	\end{beamercolorbox}
+	\pause
+
+	\textbf{Interpretation}: if \( u_j \not \in \calK_j \), then the activation
+	must be decoupled from the linear mapping in the non-convex model.
+
+\end{frame}
+
+
 \begin{frame}{Convex Reformulations: Hardness}
 
 
@@ -466,130 +567,9 @@
 
 \end{frame}
 
-
-\begin{frame}{Convex Reformulations: Big Picture}
-
-	\begin{figure}[]
-		\centering
-		\input{assets/relations_empty}
-	\end{figure}
-
-\end{frame}
-
-
-\begin{frame}{Convex Reformulations: Unconstrained Relaxation}
-	What can we do with the convex ReLU problem?
-
-	\[
-		\begin{aligned}
-			\textbf{C-ReLU}: \min_{u} & \norm{\sum_{j=1}^p D_j X (v_j - w_j) - y}_2^2 +
-			\lambda \sum_{j=1}^p \norm{v_j}_2 + \norm{w_j}_2                            \\
-			                          & \hspace{0.2em} \red{\text{s.t. }
-				v_j, w_j \in \calK_j := \cbr{w : (2D_j - I) X w \geq 0},}
-		\end{aligned}
-	\]
-
-	\pause
-	\horizontalrule
-
-	\textbf{Relaxation}: drop the cone constraints and simplify to obtain,
-	\[
-		\begin{aligned}
-			\textbf{C-GReLU}: \min_{u} & \norm{\sum_{j=1}^p D_j X u_j - y}_2^2 +
-			\lambda \sum_{j=1}^p \norm{u_j}_2                                    \\
-		\end{aligned}
-	\]
-
-	\pause
-	\red{What does it mean? Is it still a neural network?}
-\end{frame}
-
-
-\begin{frame}{Convex Reformulations: Gated ReLU Networks}
-
-	\begin{beamercolorbox}[wd=\textwidth,sep=1em]{result}
-		\textbf{Theorem 2.2} (informal): C-GReLU is equivalent to solving
-		\[
-			\textbf{NC-GReLU}: \min_{W_1, \alpha} \half \norm{\sum_{j=1}^p \phi_{g_j}(X, w_{j})\alpha - y}_2^2 + \frac{\lambda}{2} \sum_{j=1}^p \norm{w_{j}}_2^2 + |\alpha_j|^2,
-		\]
-		with the ``Gated ReLU'' \citep{fiat2019decoupling} activation function
-		\[ \phi_{g}(X, u) = \text{diag}(\mathbbm{1}(Xg \geq 0)) X u, \]
-		and gate vectors \( g_j \) such that
-		\[
-			D_j = \text{diag}[\mathbbm{1}(X g_j \geq 0).
-		\]
-	\end{beamercolorbox}
-	\pause
-
-	\textbf{Interpretation}: if \( u_j \not \in \calK_j \), then the activation
-	must be decoupled from the linear mapping in the non-convex model.
-
-\end{frame}
-
-\begin{frame}{Gated ReLU Networks: Proof Sketch}
-	The proof reduces C-GReLU to NC-GReLU and vice-versa.
-
-	\vspace{1em}
-
-	\textbf{Roadmap}:
-	\begin{enumerate}
-		\item Manipulate NC-GReLU to remove invariance to certain
-		      scale re-parameterizations.
-		\item Merge second-layer weights into first-layer weights.
-	\end{enumerate}
-
-	\pause
-	\horizontalrule
-
-	The prediction function is
-	\[
-		\begin{aligned}
-			f_{w, \alpha}(X) & = \sum_{j=1}^p \phi_{g_j}(X, w_{j})\alpha                                  \\\pause
-			                 & = \sum_{j=1}^p \text{diag}(\mathbbm{1}(Xg_j \geq 0)) X w_j \cdot \alpha_j.
-		\end{aligned}
-	\]
-	\pause
-	Invariant to scale re-parameterizations of the form
-	\[
-		w'_j = w_j \cdot \beta, \quad \alpha_j' = \frac{\alpha_j}{\beta_j}.
-	\]
-\end{frame}
-
-\begin{frame}{Gated ReLU Networks: Sketch Continued}
-	Let \purple{\( \rbr{w^*, \alpha^*} \)} be a solution to NC-GReLU.\pause
-
-	\vspace{1em}
-	By Young's inequality,
-	\[
-		2 \sum_{j=1}^p \norm{w_j^*}_2 \abs{\alpha_j^*} \leq \sum_{j=1}^p \norm{w_j^*}_2^2 + |\alpha^*_j|^2
-	\]\pause
-	Equality is achieved for \( w'_j = w_j^* \cdot \beta \), \( \alpha_j' = \alpha_j^* / \beta \), where
-	\[ \purple{\beta = \sqrt{\frac{|\alpha_j^*|}{\norm{w_j^*}_2}}.} \]
-	\pause
-	But \( f \) is invariant to such re-parameterizations!
-	\pause
-	\begin{align*}
-		\implies \half & \norm{\sum_{j=1}^p \phi_{g_j}(X, w^*_{j})\alpha_j^* - y}_2^2 + \frac{\lambda}{2} \sum_{j=1}^p \norm{w^*_{j}}_2^2 + |\alpha_j^*|^2    \\
-		      & \quad \quad \geq \half \norm{\sum_{j=1}^p \phi_{g_j}(X, w'_{j})\alpha'_j - y}_2^2 + \lambda \sum_{j=1}^p \norm{w'_{j}}_2 |\alpha'_j| \\
-	\end{align*}
-\end{frame}
-
-\begin{frame}{Gated ReLU Networks: Sketch Continued}
-	Now we use positive homogeneity of the norm,
-	\[
-		\begin{aligned}
-			\half & \norm{\sum_{j=1}^p \phi_{g_j}(X, w'_{j})\alpha'_j - y}_2^2 + \lambda \sum_{j=1}^p \norm{w'_{j}}_2|\alpha'_j|                                     \\
-			      & \quad \quad = \half \norm{\sum_{j=1}^p \phi_{g_j}(X, w'_{j}\cdot\alpha'_j) - y}_2^2 + \lambda \sum_{j=1}^p \norm{w'_{j} \cdot |\alpha'_j|}_2     \\ \pause
-			      & \quad \quad = \half \norm{\sum_{j=1}^p \phi_{g_j}(X, w''_{j}) - y}_2^2 + \lambda \sum_{j=1}^p \norm{w''_{j}}_2                                   \\ \pause
-			      & \quad \quad \geq \min_{w} \half \norm{\sum_{j=1}^p \phi_{g_j}(X, w_{j}) - y}_2^2 + \lambda \sum_{j=1}^p \norm{w_{j}}_2 \quad (\textbf{C-GReLU}).
-		\end{aligned}
-	\]
-	This completes the sketch.
-\end{frame}
-
 \begin{frame}{Gated ReLu Networks: Big Picture}
 	\begin{center}
-		\Large What do we do with these models?
+		\Large Are these models really different?
 	\end{center}
 
 	\pause
@@ -598,6 +578,199 @@
 		\centering
 		\input{assets/relations_complete}
 	\end{figure}
+\end{frame}
+
+\setbeamercolor{background canvas}{bg=LightCyan}
+
+\begin{frame}{}
+	\begin{center}
+		\huge III. Solution Sets
+	\end{center}
+\end{frame}
+\setbeamercolor{background canvas}{bg=white}
+
+\begin{frame}{Model Problem: Constrained Group Lasso}
+
+	{
+		\large
+		\textbf{Approach}:
+		\begin{enumerate}
+			\item \pause
+			      Characterize \green{convex reformulations} via model problem;
+			\item \pause
+			      Extend results to \red{non-convex} training problem
+			      using solution mapping;
+			\item \pause
+			      Use insights for \green{better algorithms}.
+		\end{enumerate}
+	}
+
+	\pause
+	\horizontalrule
+
+	\begin{itemize}
+		\item Let \( Z \in \R^{n \times d} \) be a data matrix and \( y \) associated targets.
+		      \pause
+		\item Let \( \calB = \cbr{b_1, \ldots, b_p} \) partition the
+		      features space.
+		      \pause
+	\end{itemize}
+
+	\vspace{2ex}
+
+	C-ReLU and C-GReLU are \green{constrained group lasso} problems:
+
+	\begin{equation*}
+		\textbf{CGL}: \min_{w}
+		\cbr{ \half \norm{Z w - y}_2^2
+			+ \lambda \sum_{\bi \in \calB} \norm{\wi}_2
+			\, : \, \Ki^\top \wi \leq 0 \, \forall \, \bi \in \calB}.
+	\end{equation*}
+
+\end{frame}
+
+
+\begin{frame}{CGL: Mapping to Convex Reformulations}
+
+	\begin{equation*}
+		\textbf{CGL}: \min_{w}
+		\cbr{ \half \norm{\green{Z} w - y}_2^2
+			+ \lambda \sum_{\red{\bi \in \calB}} \norm{\wi}_2
+			\, : \, \blue{\Ki^\top \wi \leq 0} \, \forall \, \bi \in \calB}.
+	\end{equation*}
+
+	\vspace{3ex}
+
+	\pause
+	\horizontalrule
+
+	\begin{itemize}
+		\pause
+		\item \green{Basis expansion} \( Z = [D_1 X, \ldots, D_p X] \);
+		      \pause
+		      \vspace{1ex}
+		\item \( \bi \in \calB \) is one neuron/\red{activation pattern} \( D_i \);
+		      \pause
+		      \vspace{1ex}
+		\item C-ReLU: enforce \blue{cone constraints} with \( \Ki = X^\top (2 D_i - I) \);
+		      \pause
+		      \vspace{1ex}
+		\item C-GReLU: unconstrained, so \( \Ki = 0 \).
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}{CGL: Optimality Conditions}
+	\[
+		L(W_1, w_2) := \norm{\sum_{j=1}^m (X W_{1j})_+ w_{wj} - y}_2^2
+		+ \lambda \sum_{j=1}^m \norm{W_{1j}}_2^2 + |w_{2j}|^2
+	\]
+
+	\pause
+
+	\textbf{Suppose}: \( \nabla L(W_1, w_2) = 0 \). Then \( \ldots \)?
+	\pause \red{critical point}.
+
+	\pause
+	\horizontalrule
+
+	\textbf{CGL}: \green{KKT conditions} are necessary and sufficient for optimality:\pause
+
+	\begin{align*}
+		\ri                                   & \geq 0,                            \tag{dual feasible}         \\
+		\Ki^\top \wi                          & \leq 0                             \tag{primal feasible}       \\
+		\Xbi^\top (Z w - y) + \Ki \ri + s_\bi & = 0                                \tag{stationary Lagrangian} \\
+		[\ri]_j \cdot [\Ki]_j^\top \wi        & = 0 \quad \forall \, j \in [a_\bi], \tag{CS}
+	\end{align*}
+	where \( s_\bi \in \partial \lambda \norm{\wi}_2 \).
+
+\end{frame}
+
+\begin{frame}{CGL: Towards Characterizing the Optimal Set}
+
+	\textbf{Facts}: let \( (w, \rho) \) be primal dual optimal. \pause
+	\begin{itemize}
+		\item Model fit \( \hat y = Z w \) is constant over optimal set. \pause
+		\item Implies correlation \( \ci = \Xbi^\top (y - Z w) \) is constant. \pause
+		\item Can always assume \( \rho \) is unique (e.g. min-norm dual solution).
+	\end{itemize}
+
+	\pause
+	\horizontalrule
+
+	\textbf{Non-zero Blocks}: \( \wi \neq 0 \implies s_\bi = \lambda \wi / \norm{\wi}_2 \).
+	We find that
+	\[
+		\wi = \blue{\alpha_\bi} \underbrace{\sbr{\Xbi^\top (y - Z w) - \Ki \ri}}_{\text{Unique}},
+	\]
+	for \( \blue{\alpha_\bi} \geq 0 \)
+
+\end{frame}
+
+\begin{frame}{CGL: the Optimal Set}
+
+	Let \( \calS_\lambda \) be the set of blocks supported by some solution:
+	\[
+		\calS_\lambda = \cbr{\bi \in \calB : \exists w \in \solfn(\lambda), \wi \neq 0}.
+	\]
+
+	\pause
+
+	\begin{proposition}[Informal]\label{prop:sol-fn-cgl}
+		Fix \( \lambda > 0 \).
+		The optimal set for CGL problem is
+		given by
+		\begin{equation*}\label{eq:sol-fn-cgl}
+			\begin{aligned}
+				\solfn(\lambda) =
+				\big\{  w  \in  \R^d : \, & X w = \hat y,                                     \\
+				                          & \forall \, \bi  \in  \calS_\lambda,
+				\wi =  \alpha_\bi \vi, \alpha_\bi \geq 0, \,                                  \\
+				                          & \forall \, b_j \in \calB \setminus \calS_\lambda,
+				\w_{b_j} = 0
+				\big\}
+			\end{aligned}
+		\end{equation*}
+
+	\end{proposition}
+\end{frame}
+
+\begin{frame}{Non-Convex Optimal Set}
+
+	Remember how to convert between solutions:
+	\begin{equation*}\label{eq:convex-to-relu}
+		\textbf{C to NC:} \quad
+		\begin{aligned}
+			W_{1i} & = v_i^*/ \sqrt{\norm{v_i^*}}, \quad w_{2i} = \sqrt{\norm{v_i^*}}
+			\\
+			W_{1j} & = w_i^*/ \sqrt{\norm{w_i^*}}, \quad w_{2j} = -\sqrt{\norm{w_i^*}}.
+		\end{aligned}
+	\end{equation*}
+
+	\pause
+	\horizontalrule
+
+	\begin{corollary}[Informal]
+		Suppose \( m \geq m^* \).
+		Then the optimal set for the ReLU problem is
+		\vspace{-1ex}
+		\begin{equation}\label{eq:relu-sol-fn}
+			\begin{aligned}
+				\hspace{-0.5em} \calO_\lambda  = \,
+				\big\{
+				 & (W_1,  w_2) :
+				\, f_{W_1, w_2}(X)  =  \hat y,                        \\
+				 & \forall \, \bi  \in  \calS_\lambda,
+				W_{1i} = (\sfrac{\alpha_{i}}{\lambda})^{\sfrac{1}{2}} v_i,
+				w_{2i} = (\alpha_i \lambda)^{\sfrac{1}{2}},
+				\alpha_i \geq 0                                       \\
+				 & \forall \, \bi  \in \calB \setminus \calS_\lambda,
+				W_{1i} = 0, \, w_{2i} = 0
+				\big\}.
+			\end{aligned}
+		\end{equation}
+	\end{corollary}
+
 \end{frame}
 
 
@@ -828,11 +1001,12 @@
 	\end{itemize}
 \end{frame}
 
+
 \setbeamercolor{background canvas}{bg=LightCyan}
 
 \begin{frame}{}
 	\begin{center}
-		\huge IV. Algorithms
+		\huge V. Algorithms
 	\end{center}
 \end{frame}
 \setbeamercolor{background canvas}{bg=white}

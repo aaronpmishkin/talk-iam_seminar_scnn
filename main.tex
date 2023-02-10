@@ -85,7 +85,7 @@
 	\vspace{0.5em}
 
 	\begin{enumerate}
-		\item \textbf{Critical Points}: characterize all optimal points of the non-convex training objective.\pause
+		\item \textbf{Optima}: characterize all critical points of the non-convex training objective.\pause
 
 		\item \textbf{Cone Decompositions}: develop new connections between convex training programs.\pause
 
@@ -115,19 +115,23 @@
 	\begin{itemize}
 		\large
 		\item AlexNet won with \( \red{84.69}\% \) top-five accuracy \citep{krizhevsky2012alexnet}.
+		      \vspace{1ex}
+
+		\item Today, models get \( \green{99.02}\% \) top-5 accuracy \citep{yuan2021florence}!
+		      \vspace{1ex}
+
+		      \pause
+		\item Using all sorts of tricks like pre-training, transformers, etc\ldots
 	\end{itemize}
 
 	\pause
 	\horizontalrule
 
-	\begin{itemize}
-		\large
-		\item Today, models get \( \green{99.02}\% \) top-5 accuracy \citep{yuan2021florence}!
-		      \vspace{1ex}
+	\begin{center}
+		\Large
+		Huge progress in terms of downstream benchmarks!
+	\end{center}
 
-		      \pause
-		\item (Using all sorts of tricks like pre-training, transformers, etc.)
-	\end{itemize}
 \end{frame}
 
 
@@ -180,12 +184,12 @@
 
 	\pause
 	\begin{itemize}
-		\item \textbf{Stationarity}: Stationarity \( \centernot \implies \) optimality.
+		\item \textbf{Optimality Conditions}: Stationarity \( \centernot \implies \) optimality.
 		      Few/no certificates.
 
 		      \pause
-		\item \textbf{Model Churn}: different local minima,
-		      different performance \citep{henderson2018deep}.
+		\item \textbf{Model Churn}: different local/global minima,
+		      have different performance at test time~\citep{henderson2018deep}.
 
 		      \pause
 		\item \textbf{Tuning}: step-size, momentum, batch-size, etc.
@@ -201,7 +205,6 @@
 		But these issues don't exist for \green{convex} models!
 	\end{center}
 
-	\pause
 	%\begin{itemize}
 	%    \item \textbf{Certificates}: stationary points are global minima.
 
@@ -249,11 +252,10 @@
 \setbeamercolor{background canvas}{bg=white}
 
 \begin{frame}{Convex Reformulations: Flavor of Results}
+	\large
 
-	{ \large
-		\textbf{Basic Idea}: We start with a \red{non-convex} optimization problem and derive
-		an equivalent \green{convex} program.
-	}
+	\textbf{Basic Idea}: We start with a \red{non-convex} optimization problem and derive
+	an equivalent \green{convex} program.
 
 	\pause
 	\vspace{2em}
@@ -275,7 +277,7 @@
 
 	{\large \textcolor{Red}{Non-Convex Problem}}
 	\[
-		\min_{W_1, w_2} \underbrace{\half \norm{\sum_{j=1}^m (X W_{1j})_+ w_{wj} - y}_2^2}_{\text{Squared Error}}
+		\min_{W_1, w_2} \underbrace{\half \norm{\sum_{j=1}^m (X W_{1j})_+ w_{2j} - y}_2^2}_{\text{Squared Error}}
 		+ \underbrace{\lambda \sum_{j=1}^m \norm{W_{1j}}_2^2 + |w_{2j}|^2}_{\text{Weight Decay}},
 	\]
 	where \( \rbr{x}_+ = \max\cbr{x, 0} \) is the ReLU activation.
@@ -288,20 +290,35 @@
 
 \end{frame}
 
+
 \begin{frame}{Aside: ReLU Activation Patterns}
 
 	Each ReLU neuron is active on a half-space:
 
 	\pause
+
+	\begin{figure}[]
+		\centering
+		\input{assets/activation_pattern_0}
+	\end{figure}
+
+	\phantom{
+		\textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
+	}
+
+\end{frame}
+
+\begin{frame}{Aside: ReLU Activation Patterns}
+
+	Each ReLU neuron is active on a half-space:
+
 	\begin{figure}[]
 		\centering
 		\input{assets/activation_pattern_1}
 	\end{figure}
 
 	\pause
-	\begin{itemize}
-		\item \textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
-	\end{itemize}
+	\textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
 
 \end{frame}
 
@@ -315,9 +332,7 @@
 	\end{figure}
 
 
-	\begin{itemize}
-		\item \textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
-	\end{itemize}
+	\textbf{Activation Pattern} satisfies \( D_j X W_{1j} = \rbr{X W_{1j}}_+ \)
 
 \end{frame}
 
@@ -367,29 +382,6 @@
 	\vspace{7.3em}
 \end{frame}
 
-\begin{frame}{Convex Reformulations: Breaking it Down}
-
-	\[
-		\begin{aligned}
-			\min_{u} & \norm{\sum_{j=1}^p D_j X (v_j - w_j) - y}_2^2 +
-			\purple{\lambda \sum_{j=1}^p \norm{v_j}_2 + \norm{w_j}_2}  \\
-			         & \hspace{0.2em} \text{s.t. }
-			v_j, w_j \in \calK_j := \cbr{w : (2D_j - I) X w \geq 0}
-		\end{aligned}
-	\]
-	where \( D_j = \text{diag}[\mathbbm{1}(X g_j \geq 0)] \).
-
-	\horizontalrule
-
-	\begin{itemize}
-		\item \( D_j \) is a ReLU activation pattern induced by ``gate'' \( g_j \).
-		      \begin{itemize}
-			      \item \([D_j]_{ii} = 1\) if \( \abr{x_i, g_i} \geq 0 \) and \( 0 \) otherwise.
-		      \end{itemize}
-		\item \purple{Weight-decay regularization turns into ``group \( \ell_1 \)'' penalty.}
-	\end{itemize}
-	\vspace{6em}
-\end{frame}
 
 \begin{frame}{Convex Reformulations: Breaking it Down}
 
@@ -410,7 +402,6 @@
 		      \begin{itemize}
 			      \item \([D_j]_{ii} = 1\) if \( \abr{x_i, g_i} \geq 0 \) and \( 0 \) otherwise.
 		      \end{itemize}
-		\item Weight-decay regularization turns into ``group \( \ell_1 \)'' penalty.
 		\item \purple{The constraint \( v_j \in \calK_j \) implies
 			      \[
 				      \rbr{X v_j}_+ = D_j X v_j.
@@ -420,12 +411,42 @@
 	\end{itemize}
 \end{frame}
 
+\begin{frame}{Convex Reformulations: Breaking it Down}
+
+	\[
+		\begin{aligned}
+			\min_{u} & \norm{\sum_{j=1}^p D_j X (v_j - w_j) - y}_2^2 +
+			\purple{\lambda \sum_{j=1}^p \norm{v_j}_2 + \norm{w_j}_2}  \\
+			         & \hspace{0.2em} \text{s.t. }
+			v_j, w_j \in \calK_j := \cbr{w : (2D_j - I) X w \geq 0}
+		\end{aligned}
+	\]
+	where \( D_j = \text{diag}[\mathbbm{1}(X g_j \geq 0)] \).
+
+	\horizontalrule
+
+	\begin{itemize}
+		\item \( D_j \) is a ReLU activation pattern induced by ``gate'' \( g_j \).
+		      \begin{itemize}
+			      \item \([D_j]_{ii} = 1\) if \( \abr{x_i, g_i} \geq 0 \) and \( 0 \) otherwise.
+		      \end{itemize}
+		\item The constraint \( v_j \in \calK_j \) implies
+		      \[
+			      \rbr{X v_j}_+ = D_j X v_j.
+		      \]
+		      That is, \( v_j \) has the activation encoded by \( D_j \).
+		\item \purple{Weight decay regularization turns into ``group \( \ell_1 \)'' penalty.}
+	\end{itemize}
+	\vspace{6em}
+\end{frame}
+
+
 \begin{frame}{Convex Reformulations: Solution Mapping}
 
-	Given \( \rbr{v^*, w^*} \), an optimal non-convex ReLU network is
+	Given \( \rbr{v^*, w^*} \), an optimal non-convex ReLU network is obtained by
 
 	\begin{equation*}
-		\textbf{C to NC:} \quad
+		\textbf{C to NC:} \quad \quad
 		\begin{aligned}
 			W_{1i} & = v_i^*/ \sqrt{\norm{v_i^*}}, \quad w_{2i} = \sqrt{\norm{v_i^*}}
 			\\
@@ -442,9 +463,9 @@
 	\pause
 	\horizontalrule
 
-	Given \( (W_{1i}^*, w_{2i}^*) \), the optimal convex ReLU model is
+	Given \( (W_{1i}^*, w_{2i}^*) \), an optimal convex ReLU model is
 	\begin{equation*}
-		\textbf{NC to C:} \quad
+		\textbf{NC to C:} \quad \quad
 		\begin{aligned}
 			v_i & = W_{1i}^* \abs{w_{2i}^*} & \mbox{if \( w_{2i}^* \geq 0 \)} \\
 			w_i & = W_{1i}^* \abs{w_{2i}^*} & \mbox{otherwise.}
@@ -458,8 +479,45 @@
 
 \end{frame}
 
+\begin{frame}{Convex Reformulations: Hardness}
+
+
+	\[
+		p = \abs{\cbr{D_j = \text{diag}[\mathbbm{1}(X g_j \geq 0)] : g_j \in \R^d }}
+	\]
+
+	\vspace{2em}
+	\pause
+
+	The \textbf{convex program} is:
+	\vspace{0.5em}
+	\begin{itemize}
+		\item \red{Exponential in general}: \( p \in O(r \cdot (\frac{n}{r})^r) \),
+		      where \( r = \text{rank}(X) \).
+		      \vspace{0.25em}
+		      \begin{itemize}
+			      \item Bound comes from theory of hyperplane arrangements \citep{winder1966partitions}.
+		      \end{itemize}
+		      \pause
+
+		      \vspace{0.5em}
+
+		\item Highly \green{structured} --- it's a (constrained) generalized linear model!
+	\end{itemize}
+
+	\vspace{1em}
+	\pause
+
+	\begin{center}
+		\Large
+		We exchange one kind of hardness for another.
+	\end{center}
+
+\end{frame}
+
+
 \begin{frame}{Convex Reformulations: Gated ReLU Networks}
-	What can we do with the convex ReLU problem?
+	What about simpler convex reformulations?
 
 	\[
 		\begin{aligned}
@@ -508,41 +566,6 @@
 \end{frame}
 
 
-\begin{frame}{Convex Reformulations: Hardness}
-
-
-	\[
-		p = \abs{\cbr{D_j = \text{diag}[\mathbbm{1}(X g_j \geq 0)] : g_j \in \R^d }}
-	\]
-
-	\vspace{2em}
-	\pause
-
-	The \textbf{convex program} is:
-	\vspace{0.5em}
-	\begin{itemize}
-		\item \red{Exponential in general}: \( p \in O(r \cdot (\frac{n}{r})^r) \),
-		      where \( r = \text{rank}(X) \).
-		      \vspace{0.25em}
-		      \begin{itemize}
-			      \item Bound comes from theory of hyperplane arrangements \citep{winder1966partitions}.
-		      \end{itemize}
-		      \pause
-
-		      \vspace{0.5em}
-
-		\item Highly \green{structured} --- it's a (constrained) generalized linear model!
-	\end{itemize}
-
-	\vspace{1em}
-	\pause
-
-	\begin{center}
-		\Large
-		We exchange one kind of hardness for another.
-	\end{center}
-
-\end{frame}
 
 \begin{frame}{Gated ReLu Networks: Big Picture}
 	\begin{center}
@@ -570,15 +593,17 @@
 
 	{
 		\large
-		\textbf{Approach}:
+		\textbf{General Approach}:
 		\begin{enumerate}
 			\large
 			\item \pause
-			      Characterize \green{convex reformulations} via model problem;
+			      Characterize properties of \green{convex reformulation};
 			      \vspace{1ex}
 			\item \pause
 			      Extend results to \red{non-convex} training problem
 			      using solution mapping;
+			      \pause
+			\item \ldots \textbf{Profit} \ldots
 		\end{enumerate}
 	}
 
@@ -589,7 +614,7 @@
 		\item Let \( Z \in \R^{n \times d} \) be a data matrix and \( y \) associated targets.
 		      \pause
 		\item Let \( \calB = \cbr{b_1, \ldots, b_p} \) partition the
-		      feature set.
+		      feature set \( \cbr{1, \ldots, d} \).
 		      \pause
 	\end{itemize}
 
@@ -622,17 +647,16 @@
 	\horizontalrule
 
 	\begin{itemize}
-		\pause
 		\item \green{Basis expansion} \( Z = [D_1 X, \ldots, D_p X] \);
 		      \pause
 		      \vspace{1ex}
-		\item \( \bi \in \calB \) is one neuron/\red{activation pattern} \( D_i \);
+		\item \( \bi \in \calB \) corresponds to one \red{neuron/activation pattern} \( D_i \);
 		      \pause
 		      \vspace{1ex}
 		\item C-ReLU: enforce \blue{cone constraints} with \( \Ki = X^\top (2 D_i - I) \);
 		      \pause
 		      \vspace{1ex}
-		\item C-GReLU: unconstrained, so \( \Ki = 0 \).
+		\item C-GReLU: \blue{unconstrained}, so \( \Ki = 0 \).
 	\end{itemize}
 
 \end{frame}
@@ -645,7 +669,7 @@
 
 	\pause
 
-	\textbf{Suppose}: \( \nabla L(W_1, w_2) = 0 \). Then \( \ldots \)?
+	\textbf{Suppose}: \( \nabla L(W_1, w_2) = 0 \). Then\ldots
 	\pause \red{critical point}.
 
 	\pause
@@ -655,12 +679,12 @@
 
 	\vspace{1ex}
 	\begin{itemize}
-		\item Primal-dual feasibility, complementary slackness \ldots
+		\item Primal-dual feasibility, complementary slackness.
 		      \pause
 		      \vspace{1ex}
 		\item Stationary Lagrangian:
 		      \[
-			      \underbrace{\Xbi^\top (Z w - y) + \Ki \ri}_{\vi} \in \partial \lambda \norm{\wi}_2.
+			      \underbrace{Z_\bi^\top (Z w - y) - \Ki \ri}_{\vi} \in \partial \lambda \norm{\wi}_2.
 		      \]
 		      \pause
 		      \begin{itemize}
@@ -700,6 +724,14 @@
 %\end{frame}
 
 \begin{frame}{CGL: the Optimal Set}
+	\vspace{-2ex}
+	\begin{align*}
+		\text{Let} \quad \hat y = Z w^*, \quad \quad \vi = Z_\bi^\top (Z w^* - y) - \Ki \ri^*
+	\end{align*}
+	\vspace{-2ex}
+	\pause
+	\horizontalrule
+	\vspace{-1ex}
 
 	Let \( \calS_\lambda \) be the set of blocks supported by some solution:
 	\[
@@ -715,7 +747,7 @@
 		\begin{equation*}
 			\begin{aligned}
 				\solfn(\lambda) =
-				\big\{  w  \in  \R^d : \, & X w = \hat y,                                     \\
+				\big\{  w  \in  \R^d : \, & Z w = \hat y,                                     \\
 				                          & \forall \, \bi  \in  \calS_\lambda,
 				\wi =  \alpha_\bi \vi, \alpha_\bi \geq 0, \,                                  \\
 				                          & \forall \, b_j \in \calB \setminus \calS_\lambda,
@@ -738,7 +770,7 @@
 
 	Remember how to convert between solutions:
 	\begin{equation*}
-		\textbf{C to NC:} \quad
+		\textbf{C to NC:} \quad \quad
 		\begin{aligned}
 			W_{1i} & = v_i^*/ \sqrt{\norm{v_i^*}}, \quad w_{2i} = \sqrt{\norm{v_i^*}}
 			\\
@@ -808,11 +840,11 @@
 
 		      \pause
 		      \vspace{1ex}
-		\item Simple algorithms for \textbf{min-norm} solutions!
+		\item Simple algorithms for computing \textbf{min-norm} solutions!
 		      \pause
 		      \vspace{1ex}
 
-		\item \textbf{Optimal} (i.e. objective-preserving) neuron pruning.
+		\item \textbf{Optimal} (i.e. objective-preserving) methods for neuron pruning.
 	\end{itemize}
 
 \end{frame}

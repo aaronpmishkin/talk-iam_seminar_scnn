@@ -33,14 +33,14 @@
 
 		\draw [->, style=arrow, draw=red] (input1) -- (hidden4);
 		\draw [->, style=arrow, draw=red] (input2) -- (hidden4);
-		\draw [->, style=arrow, draw=red] (input3) -- (hidden4) node[pos=0.5,above] {$w_{j}$};
+		\draw [->, style=arrow, draw=red] (input3) -- (hidden4) node[pos=0.5,above] {$W_{1j}$};
 
 		\node [Output] (output) at (axis cs:13,4) {$\hat y$};
 
 		\draw [->, style=arrow, draw=black] (hidden1) -- (output);
 		\draw [->, style=arrow, draw=black] (hidden2) -- (output);
 		\draw [->, style=arrow, draw=black] (hidden3) -- (output);
-		\draw [->, style=arrow, draw=red] (hidden4) -- (output) node[pos=0.5,above] {$\alpha_{j}$};
+		\draw [->, style=arrow, draw=red] (hidden4) -- (output) node[pos=0.5,above] {$w_{2j}$};
 	\end{axis}
 
 \end{tikzpicture}%
